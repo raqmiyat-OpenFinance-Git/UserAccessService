@@ -1,0 +1,1 @@
+11-08-2023 - 16:44:19 PM : ExecuteNonQuery Sp.= ipp_sp_insert_iwd_Pacs028_RPI,Exception Msg= Procedure or function 'ipp_sp_insert_iwd_Pacs028_RPI' expects parameter '@Original_Transaction_Identification', which was not supplied.

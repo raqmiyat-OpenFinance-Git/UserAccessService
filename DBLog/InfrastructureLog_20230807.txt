@@ -1,0 +1,1 @@
+07/08/2023 - 17:44:27 pm : ExecuteNonQuery Sp.= IPP_sp_insert_Owd_Pacs008_P2P_payment_details,Exception Msg= Trying to pass a table-valued parameter with 22 column(s) where the corresponding user-defined table type requires 27 column(s).

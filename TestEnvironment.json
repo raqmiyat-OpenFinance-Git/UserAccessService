@@ -1,0 +1,14 @@
+{
+  "RealInterBankStlDate": "",
+  "ProductType": "",
+  "Amount": "",
+  "Ccy": "",
+  "CategoryPurposeCode": "",
+  "AccountType": "",
+  "AccountNumbetIsClosed": "",
+  "CreditorIBAN": "",
+  "DebtorOrCreditorName": "",
+  "CreditorName": "",
+  "CreditorIsUnkown": "",
+  "ErrorMessage": ""
+}

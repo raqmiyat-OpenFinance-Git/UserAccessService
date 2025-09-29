@@ -1,0 +1,22 @@
+[
+  {
+    "ServiceName": "ConsentBackEndReceiverWorker",
+    "ServiceDescription": "Worker responsible for DataBase Entries for\n  Consent Event and Action in the Respective Tables."
+  },
+  {
+    "ServiceName": "DataSharingBackEndReceiverWorker",
+    "ServiceDescription": "Worker responsible for DataBase Entries for\n  Data Sharing in the Respective Tables"
+  },
+  {
+    "ServiceName": "ConsentManagementCentralBankReceiverWorker",
+    "ServiceDescription": "Worker responsible for DataBase Entries for\n  Consent Management in the Respective Tables"
+  },
+  {
+    "ServiceName": "ServiceInitiationBackEndReceiverWorker",
+    "ServiceDescription": "Worker responsible for DataBase Entries for\n  Service Initiation in the Respective Tables"
+  },
+  {
+    "ServiceName": "RabbitMQ",
+    "ServiceDescription": "RabbitMQ service"
+  }
+]
