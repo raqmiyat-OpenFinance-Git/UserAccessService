@@ -175,7 +175,8 @@ namespace OpenFinanceWebApi.Services
                                 ModuleId = (int)reader["Module_Id"],
                                 MenuName = reader["MenuName"].ToString(),
                                 ModuleName = reader["ModuleName"].ToString(),
-                                AccessValue = (bool)reader["AccessValue"]
+                                AccessValue = (bool)reader["AccessValue"],
+                                ProductId = (int)reader["ProductId"],
                             };
                             transactionAccesses.Add(item);
                         }
@@ -241,7 +242,7 @@ namespace OpenFinanceWebApi.Services
                     item.RoleId,
                     item.ModuleId,
                     item.ProductId,
-                    item.IsAccess,
+                    item.AccessValue,
                     item.ActionBy,
                     item.UserAction
                 );

@@ -64,6 +64,7 @@ builder.Services.AddSingleton<IDbConnection>(provider =>
 builder.Services.AddTransient<ILoginService, LoginService>();
 builder.Services.AddTransient<IHomeService, HomeService>();
 builder.Services.AddTransient<IAssignRoleMakerService, AssignRoleMakerService>();
+builder.Services.AddTransient<IAssignRoleCheckerService, AssignRoleCheckerService>();
 builder.Services.AddTransient<ITransactionAccessMakerService, TransactionAccessMakerService>();
 builder.Services.AddTransient<ITransactionAccessCheckerService, TransactionAccessCheckerService>();
 builder.Services.AddTransient<IBankConfigurationMakerService, BankConfigurationMakerService>();

@@ -97,40 +97,19 @@ namespace OpenFinanceWebApi.Controllers
 
         }
         [HttpPost("SaveAssignRole")]
-        public ActionResult<ResponseStatus> SaveAssignRole([FromBody] AssignRoleModel assignRoleModel)
+        public ActionResult<string> SaveAssignRole([FromBody] AssignRoleModel assignRoleModel)
         {
-            var responsestatus = new ResponseStatus();
-            var errorDetails = new List<ErrorDetail>();
+           string result = string.Empty;
 
             try
             {
-                var responseval = _assignRoleMakerService.SaveAssignRole(assignRoleModel)?.Trim().ToUpperInvariant();
-
-                if (responseval == "SUCCESS")
-                {
-                    responsestatus.status = "SUCCESS";
-                    responsestatus.statusMessage = "SUCCESS";
-                    errorDetails.Add(new ErrorDetail { ErrorCode = "000", ErrorDesc = "" });
-                }
-                else if (responseval == "MAKER SUCCESS")
-                {
-                    responsestatus.status = "MAKER SUCCESS";
-                    responsestatus.statusMessage = "MAKER SUCCESS";
-                    errorDetails.Add(new ErrorDetail { ErrorCode = "222", ErrorDesc = "" });
-                }
-                else
-                {
-                    errorDetails.Add(new ErrorDetail { ErrorCode = "401", ErrorDesc = responseval ?? "Unknown error" });
-                }
+                result = _assignRoleMakerService.SaveAssignRole(assignRoleModel);
             }
             catch (Exception ex)
             {
-                errorDetails.Add(new ErrorDetail { ErrorCode = "400", ErrorDesc = "An unexpected error occurred." });
                 _logger.Error(ex);
             }
-
-            responsestatus.errorDetails = errorDetails;
-            return Ok(responsestatus);
+            return Ok(result);
         }
     }
 }

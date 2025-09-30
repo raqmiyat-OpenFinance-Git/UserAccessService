@@ -26,5 +26,15 @@
 
         public string? ApprovedBy { get; set; }
         public DateTime? ApprovedOn { get; set; }
+
+        public string? MenuName { get; set; }
+        public string? ModuleName { get; set; }
+        public bool AccessValue { get; set; }
+        public bool OldAccessValue { get; set; }
+
+        public string? Role_Name { get; set; }
+
+        
+        
     }
 }
