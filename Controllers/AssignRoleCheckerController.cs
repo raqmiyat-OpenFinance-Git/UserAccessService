@@ -17,12 +17,12 @@ namespace OpenFinanceWebApi.Controllers
             _logger = logger;
         }
 
-        [HttpGet("GetAssignRoleListAsync")]
-        public ActionResult<IEnumerable<TransactionAccessCheck>> GetAssignRoleListAsync()
+        [HttpGet("GetAssignRoleList")]
+        public ActionResult<IEnumerable<TransactionAccessCheck>> GetAssignRoleList()
         {
             try
             {
-                return Ok(_assignRoleCheckerService.GetAssignRoleListAsync());
+                return Ok(_assignRoleCheckerService.GetAssignRoleList());
             }
             catch (Exception ex)
             {
@@ -30,12 +30,12 @@ namespace OpenFinanceWebApi.Controllers
                 return StatusCode(500, "An error occurred while fetching product lists.");
             }
         }
-        [HttpGet("GetAssignRoleHistoryAsync")]
-        public ActionResult<IEnumerable<AssignRoleListHistory>> GetAssignRoleHistoryAsync(int roleId)
+        [HttpGet("GetAssignRoleHistory")]
+        public ActionResult<IEnumerable<AssignRoleListHistory>> GetAssignRoleHistory(int roleId)
         {
             try
             {
-                return Ok(_assignRoleCheckerService.GetAssignRoleHistoryAsync(roleId));
+                return Ok(_assignRoleCheckerService.GetAssignRoleHistory(roleId));
             }
             catch (Exception ex)
             {
@@ -44,13 +44,13 @@ namespace OpenFinanceWebApi.Controllers
             }
         }
         [HttpPost("Approve")]
-        public async Task<ActionResult<string>> ApproveAsync([FromBody] AssignRoleModel assignRoleModel)
+        public ActionResult<string> Approve([FromBody] AssignRoleModel assignRoleModel)
         {
             string result = string.Empty;
 
             try
             {
-                result = await _assignRoleCheckerService.Approve(assignRoleModel);
+                result = _assignRoleCheckerService.Approve(assignRoleModel);
             }
             catch (Exception ex)
             {
@@ -59,13 +59,13 @@ namespace OpenFinanceWebApi.Controllers
             return Ok(result);
         }
         [HttpPost("Reject")]
-        public async Task<ActionResult<string>> RejecteAsync([FromBody] AssignRoleModel assignRoleModel)
+        public ActionResult<string> Reject([FromBody] AssignRoleModel assignRoleModel)
         {
             string result = string.Empty;
 
             try
             {
-                result = await _assignRoleCheckerService.Reject(assignRoleModel);
+                result = _assignRoleCheckerService.Reject(assignRoleModel);
             }
             catch (Exception ex)
             {

@@ -243,7 +243,7 @@ namespace OpenFinanceWebApi.Services
                     item.ModuleId,
                     item.ProductId,
                     item.AccessValue,
-                    item.ActionBy,
+                    assignRoleModel.ActionBy,
                     item.UserAction
                 );
             }

@@ -26,7 +26,7 @@ namespace OpenFinanceWebApi.Services
             _logger = logger;
         }
 
-        public async Task<IEnumerable<TransactionAccessCheck>> GetAssignRoleListAsync()
+        public IEnumerable<TransactionAccessCheck> GetAssignRoleList()
         {
             List<TransactionAccessCheck> transactionAccessChecks = new List<TransactionAccessCheck>();
             try
@@ -61,7 +61,7 @@ namespace OpenFinanceWebApi.Services
             return transactionAccessChecks;
         }
 
-        public async Task<IEnumerable<AssignRoleListHistory>> GetAssignRoleHistoryAsync(int roleId)
+        public IEnumerable<AssignRoleListHistory> GetAssignRoleHistory(int roleId)
         {
             List<AssignRoleListHistory> listHistories = new List<AssignRoleListHistory>();
             try
@@ -78,8 +78,8 @@ namespace OpenFinanceWebApi.Services
                             {
                                 ModuleName = reader["ModuleName"].ToString(),
                                 MenuName = reader["MenuName"].ToString(),
-                                OAccess = (int)reader["OAccess"],
-                                NAccess = (int)reader["NAccess"],
+                                OAccess = (bool)reader["OAccess"],
+                                NAccess = (bool)reader["NAccess"],
                             };
                             listHistories.Add(item);
                         }
@@ -94,17 +94,17 @@ namespace OpenFinanceWebApi.Services
             return listHistories;
         }
 
-        public async Task<string> Approve(AssignRoleModel assignRoleModel)
+        public string Approve(AssignRoleModel assignRoleModel)
         {
-            return await UpdateAssignRoleAsync(assignRoleModel);
+            return UpdateAssignRole(assignRoleModel);
         }
 
-        public async Task<string> Reject(AssignRoleModel assignRoleModel)
+        public string Reject(AssignRoleModel assignRoleModel)
         {
-            return await UpdateAssignRoleAsync(assignRoleModel);
+            return UpdateAssignRole(assignRoleModel);
         }
 
-        private async Task<string> UpdateAssignRoleAsync(AssignRoleModel assignRoleModel)
+        private string UpdateAssignRole(AssignRoleModel assignRoleModel)
         {
             string result = string.Empty;
 
@@ -114,8 +114,8 @@ namespace OpenFinanceWebApi.Services
                 {
                     command.Parameters.Add(new SqlParameter("@Role_Id", SqlDbType.Int) { Value = assignRoleModel.RoleId });
                     command.Parameters.Add(new SqlParameter("@Module_Id", SqlDbType.Int) { Value = assignRoleModel.ModuleId });
-                    command.Parameters.Add(new SqlParameter("@UserName", SqlDbType.NVarChar, 100) { Value = assignRoleModel.UserName });
-                    command.Parameters.Add(new SqlParameter("@Action", SqlDbType.Int) { Value = assignRoleModel.Action });
+                    command.Parameters.Add(new SqlParameter("@UserName", SqlDbType.NVarChar) { Value = assignRoleModel.UserName });
+                    command.Parameters.Add(new SqlParameter("@Action", SqlDbType.NVarChar) { Value = assignRoleModel.Action });
 
                     var prm1 = new SqlParameter("@Output", SqlDbType.VarChar, 2000)
                     {
