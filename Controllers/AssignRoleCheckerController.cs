@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OpenFinanceWebApi.IServices;
 using OpenFinanceWebApi.NLogService;
+using OpenFinanceWebApi.Services;
 using Raqmiyat.Entities.Login;
 
 namespace OpenFinanceWebApi.Controllers
@@ -29,6 +30,22 @@ namespace OpenFinanceWebApi.Controllers
                 _logger.Error(ex);
                 return StatusCode(500, "An error occurred while fetching product lists.");
             }
+        }
+
+        [HttpPost]
+        [Route("GetSearchAssignRoleDetails")]
+        public IEnumerable<TransactionAccessCheck> GetSearchRoleDetails(TransactionAccessCheck role)
+        {
+            try
+            {
+                return _assignRoleCheckerService.GetSearchRoleDetails(role);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+                throw;
+            }
+
         }
         [HttpGet("GetAssignRoleHistory")]
         public ActionResult<IEnumerable<AssignRoleListHistory>> GetAssignRoleHistory(int roleId)

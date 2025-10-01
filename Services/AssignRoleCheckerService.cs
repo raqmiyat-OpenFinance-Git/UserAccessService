@@ -61,6 +61,58 @@ namespace OpenFinanceWebApi.Services
             return transactionAccessChecks;
         }
 
+        public IEnumerable<TransactionAccessCheck> GetSearchRoleDetails(TransactionAccessCheck role)
+        {
+            List<TransactionAccessCheck> roleDetailsList = new List<TransactionAccessCheck>();
+
+            try
+            {
+                DbCommand command = sqlHelper.GetCommandObject("frm_sp_GetAssignRole_Search_Checker", CommandType.StoredProcedure);
+
+                command.CommandType = CommandType.StoredProcedure;
+                AddSqlParameter(command, "@RoleName", SqlDbType.VarChar, role.Role_Name);
+                AddSqlParameter(command, "@RoleId", SqlDbType.VarChar, role.RoleId);
+
+                using (IDataReader reader = sqlHelper.ExecuteDataReader(command))
+                {
+                    while (reader.Read())
+                    {
+                        TransactionAccessCheck roleDetail = new TransactionAccessCheck
+                        {
+                            RoleId = (int)reader["Role_Id"],
+                            TranId = (int)reader["Tran_Id"],
+                            ModuleId = (int)reader["Module_Id"],
+                            Role_Name = reader["ROLE_NAME"].ToString(),
+                            ActionBy = reader["User_Name"].ToString(),
+                            UserAction = reader["UserAction"].ToString(),
+                            ActionOn = reader["Action_On"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(reader["Action_On"])
+                        };
+
+                        roleDetailsList.Add(roleDetail);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error in GetSearchRoleDetails");
+            }
+
+            return roleDetailsList;
+        }
+        private void AddSqlParameter(DbCommand command, string paramName, SqlDbType paramType, object paramValue)
+        {
+            try
+            {
+                command.Parameters.Add(new SqlParameter(paramName, paramType));
+                command.Parameters[command.Parameters.Count - 1].Value = paramValue ?? DBNull.Value;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+                throw;
+            }
+
+        }
         public IEnumerable<AssignRoleListHistory> GetAssignRoleHistory(int roleId)
         {
             List<AssignRoleListHistory> listHistories = new List<AssignRoleListHistory>();
