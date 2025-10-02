@@ -5,6 +5,7 @@ using System.ServiceProcess;
 using Newtonsoft.Json;
 using OpenFinanceWebApi.Models;
 using OpenFinanceWebApi.NLogService;
+using UserAccessService.Models;
 
 namespace OpenFinanceWebApi.Controllers
 {
@@ -83,7 +84,7 @@ namespace OpenFinanceWebApi.Controllers
         [HttpGet]
         [Route("[action]")]
         [Route("api/Home/GetModule")]
-        public List<FullMenu> GetModule(string userCode)
+        public List<FRMMENU> GetModule(string userCode)
         {
             try
             {

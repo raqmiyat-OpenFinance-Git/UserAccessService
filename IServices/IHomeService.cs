@@ -1,12 +1,13 @@
 ﻿using Entities.Home;
 using System.Data;
+using UserAccessService.Models;
 
 namespace OpenFinanceWebApi.IServices
 {
     public interface IHomeService
     {
         ChartDashboard GetChartDashboard(string PaymentModule);
-        List<FullMenu> GetModule(string userCode);
+        List<FRMMENU> GetModule(string userCode);
         ValidatePassword GetPasswordPolicy();
     }
 }

@@ -6,6 +6,7 @@ using Raqmiyat.Infrastructure.Utils;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using UserAccessService.Models;
 
 namespace OpenFinanceWebApi.Services
 {
@@ -62,49 +63,90 @@ namespace OpenFinanceWebApi.Services
             return objChartDashboard;
         }
 
-        public List<FullMenu> GetModule(string userCode)
-        {
+        //public List<FullMenu> GetModule(string userCode)
+        //{
 
-            var fulllist = new List<FullMenu>();
+        //    var fulllist = new List<FullMenu>();
+        //    try
+        //    {
+        //        SqlConnection sqlcon = new SqlConnection(ConfigManager.getFrameworkDBConnection());
+        //        sqlcon.Open();
+
+        //        SqlCommand cmd = new SqlCommand("frm_sp_user_menu_access_netcore", sqlcon);
+
+        //        cmd.CommandType = CommandType.StoredProcedure;
+        //        cmd.Parameters.AddWithValue("@User_Name", userCode);
+
+
+        //        DataSet ds = new DataSet();
+        //        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+        //        adapter.Fill(ds);
+
+        //         fulllist = (from item in ds.Tables[0].AsEnumerable()
+        //                        select new FullMenu
+        //                        {
+        //                            TXNATTRIBS_TXNID = item.Field<int>("TXNATTRIBS_TXNID"),
+        //                            TXNATTRIBS_TXNNAME = item.Field<string>("TXNATTRIBS_TXNNAME"),
+        //                            TXNATTRIBS_CATEGORY = item.Field<string>("TXNATTRIBS_CATEGORY"),
+        //                            TXNATTRIBS_CATEGORY_ORDER = item.Field<int>("TXNATTRIBS_CATEGORY_ORDER"),
+        //                            TXNATTRIBS_DISPLAYLIST = item.Field<string>("TXNATTRIBS_DISPLAYLIST"),
+        //                            TXNATTRIBS_CONTROLLER_NAME = item.Field<string>("TXNATTRIBS_CONTROLLER_NAME"),
+        //                            TXNATTRIBS_ACTION_NAME = item.Field<string>("TXNATTRIBS_ACTION_NAME"),
+        //                            TXNATTRIBS_PARENT_TXNID = item.Field<int>("TXNATTRIBS_PARENT_TXNID"),
+        //                        }).ToList();
+
+        //        //return ds.Tables[0].AsEnumerable();
+        //        //return fulllist;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.Error(ex, "frm_sp_user_menu_access_netcore");
+        //        throw;
+        //    }
+        //    return fulllist;
+        //}
+
+
+        public List<FRMMENU> GetModule(string userCode)
+        {
+            var menuList = new List<FRMMENU>();
             try
             {
-                SqlConnection sqlcon = new SqlConnection(ConfigManager.getFrameworkDBConnection());
-                sqlcon.Open();
+                using (SqlConnection sqlcon = new SqlConnection(ConfigManager.getFrameworkDBConnection()))
+                {
+                    sqlcon.Open();
 
-                SqlCommand cmd = new SqlCommand("frm_sp_user_menu_access_netcore", sqlcon);
+                    using (SqlCommand cmd = new SqlCommand("FRM_SELECTMENUS", sqlcon))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@User_Name", userCode ?? (object)DBNull.Value);
 
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@User_Name", userCode);
-                
+                        DataSet ds = new DataSet();
+                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                        adapter.Fill(ds);
 
-                DataSet ds = new DataSet();
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.Fill(ds);
-
-                 fulllist = (from item in ds.Tables[0].AsEnumerable()
-                                select new FullMenu
-                                {
-                                    TXNATTRIBS_TXNID = item.Field<int>("TXNATTRIBS_TXNID"),
-                                    TXNATTRIBS_TXNNAME = item.Field<string>("TXNATTRIBS_TXNNAME"),
-                                    TXNATTRIBS_CATEGORY = item.Field<string>("TXNATTRIBS_CATEGORY"),
-                                    TXNATTRIBS_CATEGORY_ORDER = item.Field<int>("TXNATTRIBS_CATEGORY_ORDER"),
-                                    TXNATTRIBS_DISPLAYLIST = item.Field<string>("TXNATTRIBS_DISPLAYLIST"),
-                                    TXNATTRIBS_CONTROLLER_NAME = item.Field<string>("TXNATTRIBS_CONTROLLER_NAME"),
-                                    TXNATTRIBS_ACTION_NAME = item.Field<string>("TXNATTRIBS_ACTION_NAME"),
-                                    TXNATTRIBS_PARENT_TXNID = item.Field<int>("TXNATTRIBS_PARENT_TXNID"),
-                                }).ToList();
-
-                //return ds.Tables[0].AsEnumerable();
-                //return fulllist;
+                        menuList = (from item in ds.Tables[0].AsEnumerable()
+                                    select new FRMMENU
+                                    {
+                                        MenuID = item.Field<int>("MenuID"),
+                                        ModuleName = item.Field<string>("ModuleID"),
+                                        MenuName = item.Field<string>("MenuName"),
+                                        ControllerName = item.Field<string>("ControllerName"),
+                                        IndexName = item.Field<string>("IndexName"),
+                                        ItemOrder = item.Field<int>("ItemOrder"),
+                                        ModuleOrder = item.Field<short>("ModuleOrder"),
+                                        IsDeleted = item.Field<bool>("IsDeleted"),
+                                        ProductID = item.Field<int>("ProductID")
+                                    }).ToList();
+                    }
+                }
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "frm_sp_user_menu_access_netcore");
-                throw;
             }
-            return fulllist;
+            return menuList;
         }
-
         public ValidatePassword GetPasswordPolicy()
         {
 
