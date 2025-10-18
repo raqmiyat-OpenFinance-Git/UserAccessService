@@ -1,4 +1,6 @@
 ﻿using Raqmiyat.Entities.Login;
+using UserAccessService.Models;
+using User = UserAccessService.Models.User;
 
 namespace OpenFinanceWebApi.IServices
 {
@@ -11,7 +13,9 @@ namespace OpenFinanceWebApi.IServices
         string AddUser(UserMaker postData);
         string UpdateUser(UserMaker postData);
         string DeleteUser(UserMaker postData);
-
+        User GetUserProfile(string userCode);
+        string UpdateUserProfile(User user);
+        string RemoveProfileImage(string userCode);
         IEnumerable<UserMaker> GetUserLists();
         IEnumerable<UserMaker> SearchUserLists(string UserName);
         UserMaker GetIndividualUserList(int Id);

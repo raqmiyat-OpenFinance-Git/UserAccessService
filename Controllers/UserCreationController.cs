@@ -1,8 +1,11 @@
 ﻿using Entities.Common;
+using k8s.KubeConfigModels;
 using Microsoft.AspNetCore.Mvc;
 using OpenFinanceWebApi.IServices;
 using OpenFinanceWebApi.NLogService;
 using Raqmiyat.Entities.Login;
+using UserAccessService.Models;
+using User = UserAccessService.Models.User;
 
 namespace OpenFinanceWebApi.Controllers
 {
@@ -207,6 +210,98 @@ namespace OpenFinanceWebApi.Controllers
             return responsestatus;
         }
 
+        [HttpPost("UpdateProfile")]
+        public ResponseStatus UpdateProfile([FromBody] User user)
+        {
+            var responsestatus = new ResponseStatus();
+            var errorDetails = new List<ErrorDetail>();
+            var errorDetail = new ErrorDetail();
+            try
+            {
+                var responseVal = _userCreationService.UpdateUserProfile(user);
+                if (responseVal.ToUpper() == "SUCCESS")
+                {
+                    responsestatus.status = responseVal.ToUpper();
+                    responsestatus.statusMessage = "Profile updated successfully";
+                    errorDetail.ErrorCode = "000";
+                    errorDetail.ErrorDesc = "";
+                    errorDetails.Add(errorDetail);
+                }
+                else
+                {
+                    responsestatus.status = "FAILED";
+                    responsestatus.statusMessage = "Profile update failed";
+                    errorDetail.ErrorCode = "401";
+                    errorDetail.ErrorDesc = responseVal;
+                    errorDetails.Add(errorDetail);
+                }
+            }
+            catch (Exception ex)
+            {
+                responsestatus.status = "ERROR";
+                responsestatus.statusMessage = "System error occurred";
+                errorDetail.ErrorCode = "400";
+                errorDetail.ErrorDesc = "Exception: " + ex.Message;
+                errorDetails.Add(errorDetail);
+                _logger.Error(ex, "Error in UpdateProfile for user: {UserCode}" + user?.UserCode);
+            }
+            responsestatus.errorDetails = errorDetails;
+            return responsestatus;
+        }
+
+        [HttpPost("RemoveProfileImage")]
+        public ResponseStatus RemoveProfileImage([FromBody] string userCode) // Fixed parameter
+        {
+            var responsestatus = new ResponseStatus();
+            var errorDetails = new List<ErrorDetail>();
+            var errorDetail = new ErrorDetail();
+            try
+            {
+                var responseVal = _userCreationService.RemoveProfileImage(userCode);
+                if (responseVal.ToUpper() == "SUCCESS")
+                {
+                    responsestatus.status = responseVal.ToUpper();
+                    responsestatus.statusMessage = "Profile image removed successfully";
+                    errorDetail.ErrorCode = "000";
+                    errorDetail.ErrorDesc = "";
+                    errorDetails.Add(errorDetail);
+                }
+                else
+                {
+                    responsestatus.status = "FAILED";
+                    responsestatus.statusMessage = "Profile image removal failed";
+                    errorDetail.ErrorCode = "403";
+                    errorDetail.ErrorDesc = responseVal;
+                    errorDetails.Add(errorDetail);
+                }
+            }
+            catch (Exception ex)
+            {
+                responsestatus.status = "ERROR";
+                responsestatus.statusMessage = "System error occurred";
+                errorDetail.ErrorCode = "400";
+                errorDetail.ErrorDesc = "Exception: " + ex.Message;
+                errorDetails.Add(errorDetail);
+                _logger.Error(ex, "Error in RemoveProfileImage for user: {UserCode}" + userCode);
+            }
+            responsestatus.errorDetails = errorDetails;
+            return responsestatus;
+        }
+
+        [HttpGet("GetUserProfile")] // Fixed route parameter name
+        public User GetUserProfile(string UserCode) // Fixed parameter name
+        {
+            var user = new User();
+            try
+            {
+                user = _userCreationService.GetUserProfile(UserCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error in GetUserProfile for user: {UserCode}" + UserCode);
+            }
+            return user;
+        }
 
         [HttpGet]
         [Route("[action]")]
@@ -222,7 +317,7 @@ namespace OpenFinanceWebApi.Controllers
                 _logger.Error(ex);
                 throw;
             }
-            
+
         }
         [HttpGet]
         [Route("[action]")]
@@ -238,7 +333,7 @@ namespace OpenFinanceWebApi.Controllers
                 _logger.Error(ex);
                 throw;
             }
-            
+
         }
         [HttpGet]
         [Route("[action]")]
@@ -254,7 +349,7 @@ namespace OpenFinanceWebApi.Controllers
                 _logger.Error(ex);
                 throw;
             }
-           
+
         }
 
 
@@ -275,7 +370,7 @@ namespace OpenFinanceWebApi.Controllers
                 _logger.Error(ex);
                 throw;
             }
-            
+
         }
 
         [HttpGet]
@@ -292,7 +387,7 @@ namespace OpenFinanceWebApi.Controllers
                 _logger.Error(ex);
                 throw;
             }
-           
+
         }
         [HttpPost]
         [Route("[action]")]
