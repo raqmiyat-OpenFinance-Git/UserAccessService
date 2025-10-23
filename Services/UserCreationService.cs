@@ -7,6 +7,8 @@ using Raqmiyat.Infrastructure.Utils;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using UserAccessService.Models;
+using User = UserAccessService.Models.User;
 
 namespace OpenFinanceWebApi.Services
 {
@@ -20,7 +22,7 @@ namespace OpenFinanceWebApi.Services
         }
         public IEnumerable<RoleList> GetRoleLists()
         {
-           List<RoleList> rolesList = new List<RoleList>();
+            List<RoleList> rolesList = new List<RoleList>();
             try
             {
                 DbCommand? command = null;
@@ -48,7 +50,7 @@ namespace OpenFinanceWebApi.Services
         }
         public IEnumerable<ProductLists> GetProductLists()
         {
-           List<ProductLists> rolesList = new List<ProductLists>();
+            List<ProductLists> rolesList = new List<ProductLists>();
             try
             {
                 DbCommand? command = null;
@@ -265,6 +267,130 @@ namespace OpenFinanceWebApi.Services
             return Output_Desc;
         }
 
+        public User GetUserProfile(string userCode)
+        {
+            var login = new User();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(userCode))
+                {
+                    _logger.Warn("GetLogin called with empty userCode");
+                    return login;
+                }
+
+                IDataReader objReader;
+                DbCommand command;
+
+                command = sqlHelper.GetCommandObject("frm_sp_GetUserProfile", CommandType.StoredProcedure);
+                command.Parameters.Add(new SqlParameter("@UserCode", SqlDbType.VarChar, 50));
+                command.Parameters[0].Value = userCode.Trim();
+
+                using (objReader = sqlHelper.ExecuteDataReader(command))
+                {
+                    if (objReader != null && objReader.Read())
+                    {
+                        login = new User
+                        {
+                            UserCode = objReader["USERATTRIBS_NAME"] == DBNull.Value ? string.Empty : Convert.ToString(objReader["USERATTRIBS_NAME"]),
+                            FullName = objReader["USERATTRIBS_FULLNAME"] == DBNull.Value ? string.Empty : Convert.ToString(objReader["USERATTRIBS_FULLNAME"]),
+                            ProfileImage = objReader["USERATTRIBS_IMAGE"] == DBNull.Value ? null : (byte[])objReader["USERATTRIBS_IMAGE"],
+                        };
+
+                        // Log successful retrieval
+                        _logger.Info("User profile retrieved for: {UserCode}" + userCode);
+                    }
+                    else
+                    {
+                        _logger.Warn("No user found for userCode: {UserCode}" + userCode);
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                _logger.Error(sqlEx, "Database error in frm_sp_GetUserProfile for user: {UserCode}" + userCode);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Unexpected error in frm_sp_GetUserProfile for user: {UserCode}" + userCode);
+                throw;
+            }
+            return login;
+        }
+        public string UpdateUserProfile(User user)
+        {
+            string outputDesc = string.Empty;
+            bool success = false;
+            try
+            {
+                DbCommand command;
+
+                command = sqlHelper.GetCommandObject("frm_sp_UpdateUserProfile", CommandType.StoredProcedure);
+
+                // Add parameters
+                command.Parameters.Add(new SqlParameter("@UserCode", SqlDbType.VarChar));
+                command.Parameters.Add(new SqlParameter("@FullName", SqlDbType.VarChar));
+                command.Parameters.Add(new SqlParameter("@ProfileImage", SqlDbType.VarBinary));
+
+                command.Parameters[0].Value = user.UserCode;
+                command.Parameters[1].Value = string.IsNullOrEmpty(user.FullName) ? (object)DBNull.Value : user.FullName;
+                command.Parameters[2].Value = user.ProfileImage == null ? (object)DBNull.Value : user.ProfileImage;
+
+                int rowsAffected = sqlHelper.ExecuteNonQuery(command);
+                success = rowsAffected > 0;
+
+                if (success)
+                {
+                    outputDesc="SUCCESS";
+                    _logger.Info("User profile updated successfully for: {UserCode}" + user.UserCode);
+                }
+                else
+                {
+                    outputDesc= "Update failed - user not found";
+                    _logger.Warn("No rows affected when updating profile for: {UserCode}" + user.UserCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error in frm_sp_UpdateUserProfile for user: {UserCode}" + user.UserCode);
+                throw;
+            }
+            return outputDesc;
+        }
+        public string RemoveProfileImage(string userCode)
+        {
+            string outputDesc = string.Empty;
+            bool success = false;
+            try
+            {
+                DbCommand command;
+
+                command = sqlHelper.GetCommandObject("frm_sp_RemoveProfileImage", CommandType.StoredProcedure);
+                command.Parameters.Add(new SqlParameter("@UserCode", SqlDbType.VarChar));
+                command.Parameters[0].Value = userCode;
+
+                int rowsAffected = sqlHelper.ExecuteNonQuery(command);
+                success = rowsAffected > 0;
+
+                if (success)
+                {
+                    outputDesc = "SUCCESS";
+                    _logger.Info("Profile image removed successfully for: {UserCode}" + userCode);
+                }
+                else
+                {
+                    outputDesc = "Removal failed - user not found";
+                    _logger.Warn("No rows affected when removing profile image for: {UserCode}" + userCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error in frm_sp_RemoveProfileImage for user: {UserCode}" + userCode);
+                throw;
+            }
+            return outputDesc; // Fixed: return outputDesc instead of success
+        }
+
         public IEnumerable<UserMaker> GetUserLists()
         {
             List<UserMaker> userMakerList = new List<UserMaker>();
@@ -354,7 +480,7 @@ namespace OpenFinanceWebApi.Services
 
         public UserMaker GetIndividualUserList(int Id)
         {
-           UserMaker userMakerList = new UserMaker();
+            UserMaker userMakerList = new UserMaker();
             try
             {
                 DbCommand? command = null;
@@ -430,7 +556,7 @@ namespace OpenFinanceWebApi.Services
         //Checker
         public IEnumerable<UserMaker> GetCheckerLists()
         {
-           List<UserMaker> userMakerList = new List<UserMaker>();
+            List<UserMaker> userMakerList = new List<UserMaker>();
             try
             {
                 DbCommand command = null;
