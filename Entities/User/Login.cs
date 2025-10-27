@@ -4,9 +4,10 @@
     {
         public int UserID { get; set; }
         public string UserCode { get; set; }
-        public string UserImage { get; set; }
         public string UserPassword { get; set; }
         public string UserStatus { get; set; }
+        public string UserFullName { get; set; }
+        public byte[] UserImage { get; set; }
 
 
     }

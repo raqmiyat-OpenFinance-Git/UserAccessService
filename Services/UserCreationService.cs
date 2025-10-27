@@ -323,20 +323,33 @@ namespace OpenFinanceWebApi.Services
             bool success = false;
             try
             {
-                DbCommand command;
+                DbCommand command = sqlHelper.GetCommandObject("frm_sp_UpdateUserProfile", CommandType.StoredProcedure);
 
-                command = sqlHelper.GetCommandObject("frm_sp_UpdateUserProfile", CommandType.StoredProcedure);
+                // Create parameters and assign values
+                SqlParameter userCodeParam = new SqlParameter("@UserCode", SqlDbType.NVarChar, 50)
+                {
+                    Value = user.UserCode
+                };
 
-                // Add parameters
-                command.Parameters.Add(new SqlParameter("@UserCode", SqlDbType.VarChar));
-                command.Parameters.Add(new SqlParameter("@FullName", SqlDbType.VarChar));
-                command.Parameters.Add(new SqlParameter("@ProfileImage", SqlDbType.VarBinary));
+                SqlParameter fullNameParam = new SqlParameter("@FullName", SqlDbType.NVarChar, 100)
+                {
+                    Value = string.IsNullOrEmpty(user.FullName) ? (object)DBNull.Value : user.FullName
+                };
 
-                command.Parameters[0].Value = user.UserCode;
-                command.Parameters[1].Value = string.IsNullOrEmpty(user.FullName) ? (object)DBNull.Value : user.FullName;
-                command.Parameters[2].Value = user.ProfileImage == null ? (object)DBNull.Value : user.ProfileImage;
+                SqlParameter profileImageParam = new SqlParameter("@ProfileImage", SqlDbType.VarBinary, -1)
+                {
+                    Value = user.ProfileImage ?? (object)DBNull.Value
+                };
+                var rowsParam = new SqlParameter("@RowsAffected", SqlDbType.Int) { Direction = ParameterDirection.Output };
+                
+                // Add parameters to command
+                command.Parameters.Add(userCodeParam);
+                command.Parameters.Add(fullNameParam);
+                command.Parameters.Add(profileImageParam);
+                command.Parameters.Add(rowsParam);
+                sqlHelper.ExecuteNonQuery(command);
 
-                int rowsAffected = sqlHelper.ExecuteNonQuery(command);
+                int rowsAffected = (int)rowsParam.Value;
                 success = rowsAffected > 0;
 
                 if (success)
