@@ -38,6 +38,7 @@ namespace OpenFinanceWebApi.IServices
                         {
                             UserID = objReader["UserID"] == null ? 0 : Convert.ToInt32(objReader["UserID"]),
                             UserCode = objReader["UserCode"] == null ? string.Empty : Convert.ToString(objReader["UserCode"]),
+                            UserImage = objReader["UserImage"] == null ? string.Empty : Convert.ToString(objReader["UserImage"]),
                             UserPassword = objReader["UserPassword"] == null ? string.Empty : Convert.ToString(objReader["UserPassword"]),
                             UserStatus = objReader["UserStatus"] == null ? string.Empty : Convert.ToString(objReader["UserStatus"]),
 
