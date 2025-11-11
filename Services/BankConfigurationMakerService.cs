@@ -40,7 +40,7 @@ namespace OpenFinanceWebApi.Services
                 AddSqlParameter(command, "@BC_ApiVersion", SqlDbType.NVarChar, bankConfigurationModel!.ApiVersion!);
                 AddSqlParameter(command, "@BC_TimeZoneLocale", SqlDbType.NVarChar, bankConfigurationModel!.TimeZoneLocale!);
                 AddSqlParameter(command, "@BC_CurrencyDefault", SqlDbType.NVarChar, bankConfigurationModel.CurrencyDefault!);
-                AddSqlParameter(command, "@BC_ConsentValidityPeriod", SqlDbType.DateTime, bankConfigurationModel.ConsentValidityPeriod!);
+                AddSqlParameter(command, "@BC_ConsentValidityPeriod", SqlDbType.NVarChar, bankConfigurationModel.ConsentValidityPeriod!);
                 AddSqlParameter(command, "@BC_SessionTimeout", SqlDbType.Int, bankConfigurationModel.SessionTimeout!);
                 AddSqlParameter(command, "@BC_RetryCount", SqlDbType.Int, bankConfigurationModel.RetryCount!);
                 AddSqlParameter(command, "@BC_AuditTrail", SqlDbType.NVarChar, bankConfigurationModel.AuditTrailEnabled!);
@@ -104,7 +104,7 @@ namespace OpenFinanceWebApi.Services
                         bankConfigurations.ApiVersion = Convert.ToString(dataReader["BC_ApiVersion"]);
                         bankConfigurations.TimeZoneLocale = Convert.ToString(dataReader["BC_TimeZoneLocale"]);
                         bankConfigurations.CurrencyDefault = Convert.ToString(dataReader["BC_CurrencyDefault"]);
-                        bankConfigurations.ConsentValidityPeriod = Convert.ToDateTime(dataReader["BC_ConsentValidityPeriod"]);
+                        bankConfigurations.ConsentValidityPeriod = Convert.ToString(dataReader["BC_ConsentValidityPeriod"]);
                         bankConfigurations.SessionTimeout = Convert.ToInt32(dataReader["BC_SessionTimeout"]);
                         bankConfigurations.RetryCount = Convert.ToInt32(dataReader["BC_RetryCount"]);
                         bankConfigurations.AuditTrailEnabled = Convert.ToString(dataReader["BC_AuditTrail"]);

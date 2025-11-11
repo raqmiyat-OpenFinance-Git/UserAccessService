@@ -60,7 +60,7 @@ namespace Entities.BankConfiguration
         public string? ApiVersion { get; set; }
         public string? TimeZoneLocale { get; set; }
         public string? CurrencyDefault { get; set; }
-        public DateTime? ConsentValidityPeriod { get; set; }
+        public string? ConsentValidityPeriod { get; set; }
         public int? SessionTimeout { get; set; }
         public int? RetryCount { get; set; }
         public string? DataRetentionPeriod { get; set; }

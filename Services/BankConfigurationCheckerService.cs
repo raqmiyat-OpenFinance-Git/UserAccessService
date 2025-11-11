@@ -46,7 +46,7 @@ namespace OpenFinanceWebApi.Services
                         bankConfigurations.ApiVersion = Convert.ToString(objReader["BC_ApiVersion"]);
                         bankConfigurations.TimeZoneLocale = Convert.ToString(objReader["BC_TimeZoneLocale"]);
                         bankConfigurations.CurrencyDefault = Convert.ToString(objReader["BC_CurrencyDefault"]);
-                        bankConfigurations.ConsentValidityPeriod = Convert.ToDateTime(objReader["BC_ConsentValidityPeriod"]);
+                        bankConfigurations.ConsentValidityPeriod = Convert.ToString(objReader["BC_ConsentValidityPeriod"]);
                         bankConfigurations.SessionTimeout = Convert.ToInt32(objReader["BC_SessionTimeout"]);
                         bankConfigurations.RetryCount = Convert.ToInt32(objReader["BC_RetryCount"]);
                         bankConfigurations.AuditTrailEnabled = Convert.ToString(objReader["BC_AuditTrail"]);
@@ -88,7 +88,7 @@ namespace OpenFinanceWebApi.Services
                 AddSqlParameter(command, "@BC_ApiVersion", SqlDbType.NVarChar, bankConfigurationCheckerModel!.ApiVersion!);
                 AddSqlParameter(command, "@BC_TimeZoneLocale", SqlDbType.NVarChar, bankConfigurationCheckerModel!.TimeZoneLocale!);
                 AddSqlParameter(command, "@BC_CurrencyDefault", SqlDbType.NVarChar, bankConfigurationCheckerModel.CurrencyDefault!);
-                AddSqlParameter(command, "@BC_ConsentValidityPeriod", SqlDbType.DateTime, bankConfigurationCheckerModel.ConsentValidityPeriod!);
+                AddSqlParameter(command, "@BC_ConsentValidityPeriod", SqlDbType.NVarChar, bankConfigurationCheckerModel.ConsentValidityPeriod!);
                 AddSqlParameter(command, "@BC_SessionTimeout", SqlDbType.Int, bankConfigurationCheckerModel.SessionTimeout!);
                 AddSqlParameter(command, "@BC_RetryCount", SqlDbType.Int, bankConfigurationCheckerModel.RetryCount!);
                 AddSqlParameter(command, "@BC_AuditTrail", SqlDbType.NVarChar, bankConfigurationCheckerModel.AuditTrailEnabled!);

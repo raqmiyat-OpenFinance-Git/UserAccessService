@@ -1,16 +1,15 @@
 using FrameWork.Custom;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.EntityFrameworkCore;
 using OpenFin_User_Management_WebApi.IServices;
 using OpenFinanceWebApi.Custom;
 using OpenFinanceWebApi.IServices;
-using OpenFinanceWebApi.Models;
 using OpenFinanceWebApi.NLogService;
 using OpenFinanceWebApi.Services;
 using Raqmiyat.Framework.Model;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using UserAccessService.IServices;
 using UserAccessService.Services;
 
@@ -105,15 +104,30 @@ builder.Services.AddStackExchangeRedisCache(options => { options.Configuration =
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "OpenFinance Web API",
+        Version = "v1"
+    });
+});
+
 
 builder.Services.AddHealthChecks();
-
+var cultureInfo = new CultureInfo("en-IN");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 var app = builder.Build();
 app.UseCors(AllowSpecificOrigins);
 
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "OpenFinance Web API v1");
+});
+
 
 app.UseHttpsRedirection();
 

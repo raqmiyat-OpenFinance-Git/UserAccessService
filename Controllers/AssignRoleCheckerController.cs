@@ -24,6 +24,7 @@ namespace OpenFinanceWebApi.Controllers
             try
             {
                 return Ok(_assignRoleCheckerService.GetAssignRoleList());
+                
             }
             catch (Exception ex)
             {

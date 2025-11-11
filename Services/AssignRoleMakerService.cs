@@ -216,7 +216,7 @@ namespace OpenFinanceWebApi.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "frm_sp_insert_txnaccess_check_netcore");
+                _logger.Error(ex, "FRM_SP_ASSIGNROLE_MAKER_UPDATE");
                 result = ex.Message;
             }
             return result;

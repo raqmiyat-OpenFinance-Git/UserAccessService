@@ -55,7 +55,7 @@ namespace OpenFinanceWebApi.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Error in frm_sp_GetRolesByProductId");
+                _logger.Error(ex, "Error in frm_sp_GetAssignRoleChecker");
             }
 
             return transactionAccessChecks;
