@@ -1,12 +1,11 @@
 ﻿using Entities.BankConfigurationChecker;
 using OpenFinanceWebApi.IServices;
-using Raqmiyat.Infrastructure.Data;
-using System.Data.Common;
-using System.Data;
-using Raqmiyat.Infrastructure.Utils;
-using System.Data.SqlClient;
-using OpenFinanceWebApi.Custom;
 using OpenFinanceWebApi.NLogService;
+using Raqmiyat.Infrastructure.Data;
+using Raqmiyat.Infrastructure.Utils;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
 
 namespace OpenFinanceWebApi.Services
 {
@@ -25,7 +24,7 @@ namespace OpenFinanceWebApi.Services
 
                 var bankConfigurations = new BankConfigurationCheckerModel();
 
-                var command = sqlHelper.GetCommandObject("ipp_sp_select_BankConfiguration_Checker", CommandType.StoredProcedure);
+                var command = sqlHelper.GetCommandObject("OF_sp_select_BankConfiguration_Checker", CommandType.StoredProcedure);
 
                 using (var objReader = sqlHelper.ExecuteDataReader(command))
                 {
@@ -62,7 +61,7 @@ namespace OpenFinanceWebApi.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "ipp_sp_select_BankConfiguration_Checker");
+                _logger.Error(ex, "OF_sp_select_BankConfiguration_Checker");
                 throw;
             }
         }
@@ -71,7 +70,7 @@ namespace OpenFinanceWebApi.Services
         {
             try
             {
-                var command = sqlHelper.GetCommandObject("ipp_sp_insert_BankConfiguration_Checker", CommandType.StoredProcedure);
+                var command = sqlHelper.GetCommandObject("OF_sp_insert_BankConfiguration_Checker", CommandType.StoredProcedure);
 
                 AddSqlParameter(command, "@BC_Tat_Interval_sec", SqlDbType.Int, bankConfigurationCheckerModel.TatSec);
                 AddSqlParameter(command, "@BC_Is_Validate", SqlDbType.Bit, bankConfigurationCheckerModel.ValidateMessage);
@@ -105,7 +104,7 @@ namespace OpenFinanceWebApi.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "ipp_sp_insert_BankConfiguration_Checker");
+                _logger.Error(ex, "OF_sp_insert_BankConfiguration_Checker");
                 throw;
             }
         }

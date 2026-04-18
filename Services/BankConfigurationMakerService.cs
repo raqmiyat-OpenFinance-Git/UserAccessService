@@ -1,13 +1,12 @@
-﻿using OpenFinanceWebApi.IServices;
+﻿using Entities.BankConfiguration;
+using Entities.BankConfigurationChecker;
+using OpenFinanceWebApi.IServices;
+using OpenFinanceWebApi.NLogService;
 using Raqmiyat.Infrastructure.Data;
 using Raqmiyat.Infrastructure.Utils;
-using Entities.BankConfiguration;
-using System.Data.Common;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
-using Entities.BankConfigurationChecker;
-using OpenFinanceWebApi.Custom;
-using OpenFinanceWebApi.NLogService;
 
 namespace OpenFinanceWebApi.Services
 {
@@ -24,7 +23,7 @@ namespace OpenFinanceWebApi.Services
             try
             {
 
-                var command = sqlHelper.GetCommandObject("ipp_sp_insert_BankConfiguration_Maker", CommandType.StoredProcedure);
+                var command = sqlHelper.GetCommandObject("OF_sp_insert_BankConfiguration_Maker", CommandType.StoredProcedure);
 
                 AddSqlParameter(command, "@BC_Tat_Interval_sec", SqlDbType.Int, bankConfigurationModel.TatSec);
                 AddSqlParameter(command, "@BC_Is_Validate", SqlDbType.Bit, bankConfigurationModel.ValidateMessage);
@@ -59,7 +58,7 @@ namespace OpenFinanceWebApi.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "ipp_sp_insert_BankConfiguration_Maker");
+                _logger.Error(ex, "OF_sp_insert_BankConfiguration_Maker");
                 throw;
             }
         }
@@ -85,7 +84,7 @@ namespace OpenFinanceWebApi.Services
             {
                 BankConfigurationMakerModel bankConfigurations = new BankConfigurationMakerModel();
 
-                var command = sqlHelper.GetCommandObject("ipp_sp_select_BankConfiguration_Maker", CommandType.StoredProcedure);
+                var command = sqlHelper.GetCommandObject("OF_sp_select_BankConfiguration_Maker", CommandType.StoredProcedure);
 
                 using (var dataReader = sqlHelper.ExecuteDataReader(command))
                 {
@@ -121,7 +120,7 @@ namespace OpenFinanceWebApi.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "ipp_sp_select_BankConfiguration_Maker");
+                _logger.Error(ex, "OF_sp_select_BankConfiguration_Maker");
                 throw;
             }
         }
@@ -147,7 +146,7 @@ namespace OpenFinanceWebApi.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "ipp_sp_get_general_Type_List_netcore");
+                _logger.Error(ex, "OF_sp_get_general_Type_List_netcore");
             }
 
             return integrationTypes;
@@ -174,7 +173,7 @@ namespace OpenFinanceWebApi.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "ipp_sp_get_general_Type_List_netcore_MSGFWD");
+                _logger.Error(ex, "OF_sp_get_general_Type_List_netcore_MSGFWD");
             }
 
             return enableMessageForwardingList;
